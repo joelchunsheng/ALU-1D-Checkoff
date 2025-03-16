@@ -21,14 +21,14 @@ module boolean #(
         
         repeat (i, 32){
             // Connect selectors
-            mux_4_32.s0[i] = alufn_signal[0];
-            mux_4_32.s1[i] = alufn_signal[1];
+            mux_4_32.s0[i] = a[i];
+            mux_4_32.s1[i] = b[i];
             
             // Connect 4 boolean operations as inputs
-            mux_4_32.in[i][0] = a[i] & b[i];     // AND
-            mux_4_32.in[i][1] = a[i] | b[i];     // OR
-            mux_4_32.in[i][2] = a[i] ^ b[i];     // XOR
-            mux_4_32.in[i][3] = a[i];            // A
+            mux_4_32.in[i][0] = alufn_signal[0];     // AND
+            mux_4_32.in[i][1] = alufn_signal[1];     // OR
+            mux_4_32.in[i][2] = alufn_signal[2];     // XOR
+            mux_4_32.in[i][3] = alufn_signal[3];            // A
             
             // Connect output
             bool[i] = mux_4_32.out[i];
