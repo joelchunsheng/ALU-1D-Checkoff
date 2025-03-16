@@ -1,0 +1,58 @@
+module alu (
+    input a[32],
+    input b[32],
+    input alufn[6],
+    output out[32],
+    output z, //
+    output v, // Overflow
+    output n // Negative
+) {
+    
+    // adder adder(#SIZE(32))
+    // compare compare()
+    // boolean boolean(#SIZE(32));
+     shifter shifter() // 3 shifter units
+    always {
+        // Test Adder
+        // adder.a = a
+        // adder.b = b
+        // adder.alufn_signal = alufn
+        
+        // implement alu logic here
+        // out = adder.out
+        // z = adder.z
+        // v = adder.v
+        // n = adder.n
+        
+        // Test Compare        
+        //compare.z = adder.z
+        //compare.v = adder.v
+        //compare.n = adder.n
+        
+        //compare.alufn = alufn
+        //out = c{31x{b0}, compare.cmp};
+        //z=adder.z
+        //v=adder.v
+        //n=adder.n
+        
+        // Test Boolean
+        // boolean.a = a;
+        // boolean.b = b;
+        // boolean.alufn_signal = alufn;
+        // out = boolean.bool;
+        // z=0
+        // v=0
+        // n=0
+        
+        // Test shifter
+        shifter.a = a
+        shifter.b = b
+        shifter.alufn = alufn
+        
+        out = shifter.shift
+        z = 0
+        v = 0
+        n = 0
+        
+    }
+}
