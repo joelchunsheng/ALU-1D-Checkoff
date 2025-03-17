@@ -9,7 +9,6 @@ module alu_manual_tester#(
     output io_segment[8],
     output io_select[4]
 ) {
-    
     alu alu
     
     always {

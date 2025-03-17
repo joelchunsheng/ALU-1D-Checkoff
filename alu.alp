@@ -94,6 +94,36 @@
                     "type": "DiskFile",
                     "path": "source/x_bit_left_shifter.luc"
                 }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/alu_test_rom_a.luc"
+                }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/alu_test_rom_b.luc"
+                }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/alu_test_rom_alufn.luc"
+                }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/alu_test_rom_expected_result.luc"
+                }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/alu_fsm_tester.luc"
+                }
             }
         ],
         "constraintFiles": [

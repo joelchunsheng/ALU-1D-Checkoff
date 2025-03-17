@@ -1,0 +1,73 @@
+module alu_fsm_tester (
+    input clk,             // clock
+    input rst,             // reset
+    output io_led[3][8]
+) {
+    // FSM states
+    enum States {IDLE, LOAD, EXECUTE, CHECK, DONE};
+    
+    alu_test_rom_a alu_test_rom_a
+    alu_test_rom_b alu_test_rom_b
+    alu_test_rom_alufn alu_test_rom_alufn
+    alu_test_rom_expected_result alu_test_rom_expected_result
+    alu alu
+    
+    sig rom_addr[4] // pointer for test case
+    sig alu_a 
+    sig alu_b
+    sig alu_opc
+    sig alu_expectedResult
+    sig computed_Result
+    
+   .clk(clk) {
+        .rst(rst) {
+            dff counter[4] // counter to loop through test cases
+            dff states[$width(States)](#INIT(States.IDLE))
+        }
+    }
+
+    // FSM state logic
+    always {
+        
+        counter.d = counter.q + 1
+        rom_addr = counter.q
+        
+
+        
+        case (states.q){
+            States.IDLE:
+                if (rom_addr<16)
+                    states.d = States.LOAD
+            
+            States.LOAD:
+                alu_test_rom_a.addr = rom_addr
+                alu_a = alu_test_rom_a.data
+                io_led[0] = alu_a
+                
+                alu_test_rom_b.addr = rom_addr
+                alu_b = alu_test_rom_b.data
+                io_led[0] = alu_b    
+                
+                alu_test_rom_alufn.addr = rom_addr
+                alu_opc = alu_test_rom_alufn.data
+            
+                alu_test_rom_expected_result.addr = rom_addr
+                alu_opc = alu_test_rom_expected_result.data
+                
+                states.d = States.EXECUTE
+            
+            States.EXECUTE:
+                alu.a = alu_a
+                alu.b = alu_b
+                alu.alufn = alu_opc
+                states.d = States.CHECK
+             
+            States.CHECK:
+                computed_Result = alu.out
+                states.d = States.IDLE
+            
+                
+                
+        }
+    }
+}

@@ -1,0 +1,14 @@
+module alu_test_rom_b (
+    input addr[4],    // Address width depends on the number of test cases (16 entries)
+    output data[32]   // Output B[32]
+) {
+    // Declare a constant ROM for B with 16 entries, each being 32 bits wide
+    const ROM_B = {
+        32h00000001, // B = 1
+        32h00000001 // B = 1
+    };
+
+    always {
+        data = ROM_B[addr];  // Output B based on the address
+    }
+}

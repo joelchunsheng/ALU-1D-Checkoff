@@ -1,0 +1,14 @@
+module alu_test_rom_expected_result (
+    input addr[4],    // Address width depends on the number of test cases (16 entries)
+    output data[32]   // Output Expected Result [32]
+) {
+    // Declare a constant ROM for Expected Result with 16 entries, each being 32 bits wide
+    const ROM_RESULT = {
+        32h00000002, // Expected result for ADD (1 + 1 = 2)
+        32h00000001 // Expected result for SUB (2 - 1 = 1)
+    };
+
+    always {
+        data = ROM_RESULT[addr];  // Output the expected result based on the address
+    }
+}
