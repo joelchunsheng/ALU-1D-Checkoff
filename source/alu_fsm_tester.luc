@@ -3,14 +3,16 @@ module alu_fsm_tester#(
 (
     input clk,             // clock
     input rst,             // reset
+    input io_button[5],
     output io_led[3][8],
     output io_segment[8],
     output io_select[4]
 ) {
     // FSM states
-    enum States {IDLE, LOAD_A, LOAD_B, LOAD_OPC, EXECUTE, CHECK};
+    enum States {IDLE, LOAD_A, LOAD_B, LOAD_OPC, EXECUTE, CHECK, MANUAL};
     const SLOW_CLOCK_DEFAULT_SPEED = $is_sim() ? 8 : 28 // put 8  for sim, 28 for hardware
-
+    const CLK_FREQ1 = $is_sim() ? 1000: 10000000
+    
     alu_test_rom_a alu_test_rom_a
     alu_test_rom_b alu_test_rom_b
     alu_test_rom_alufn alu_test_rom_alufn
@@ -22,6 +24,8 @@ module alu_fsm_tester#(
     sig slow_clock
     
    .clk(clk) {
+         edge_detector io_button_edge[5](#RISE(5x{{1}}), #FALL(5x{{0}}))
+         button_conditioner io_button_cond[5](#CLK_FREQ(5x{{CLK_FREQ1}}))
          edge_detector slow_clock_edge(#RISE(1), #FALL(0))
         .rst(rst) {
             dff current_value[32](#INIT(0))
@@ -48,6 +52,9 @@ module alu_fsm_tester#(
         io_select = 4hF
         slow_clock_edge.in = 0
         
+        io_button_cond.in = io_button[4:0]
+        io_button_edge.in = io_button_cond.out
+        
         counter.d = counter.q
         rom_addr = counter.q
         current_value.d = current_value.q
@@ -72,16 +79,17 @@ module alu_fsm_tester#(
         
         case (states.q){
             States.IDLE:
-                if (~slow_clock_edge.out){
+                if(io_button_edge.out[1] && ~slow_clock_edge.out){ 
                     slow_clock_enable.d = 1
-                    if (rom_addr<4)
-                        states.d = States.LOAD_A
-                }else{
-                    counter.d = counter.q + 1
-                                        if (rom_addr<4)
-                        states.d = States.LOAD_A
+                    states.d = States.LOAD_A 
                 }
-          
+                else if(io_button_edge.out[4] && slow_clock_enable.q){
+                    counter.d = counter.q + 1
+                    states.d = States.LOAD_A    
+                } 
+                else if(io_button_edge.out[0] && slow_clock_enable.q){
+                    
+                }
 
             States.LOAD_A:
                 if (slow_clock_edge.out){

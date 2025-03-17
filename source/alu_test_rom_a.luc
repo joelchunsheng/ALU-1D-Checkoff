@@ -6,7 +6,7 @@ module alu_test_rom_a (
     always {
         case (addr) {
             0: a = 32b00000001
-            1: a = 32b00000111
+            1: a = 32b00000011
             2: a = 32b00000011
             3: a = 32b00000001
             default: a = 32d0
