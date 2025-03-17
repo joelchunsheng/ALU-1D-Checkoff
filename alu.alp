@@ -124,6 +124,12 @@
                     "type": "DiskFile",
                     "path": "source/alu_fsm_tester.luc"
                 }
+            },
+            {
+                "file": {
+                    "type": "Component",
+                    "path": "Pulses/edge_detector.luc"
+                }
             }
         ],
         "constraintFiles": [

@@ -1,73 +1,127 @@
-module alu_fsm_tester (
+module alu_fsm_tester#(
+    CLK_FREQ ~ 1000 : CLK_FREQ > 0)  
+(
     input clk,             // clock
     input rst,             // reset
-    output io_led[3][8]
+    output io_led[3][8],
+    output io_segment[8],
+    output io_select[4]
 ) {
     // FSM states
-    enum States {IDLE, LOAD, EXECUTE, CHECK, DONE};
-    
+    enum States {IDLE, LOAD_A, LOAD_B, LOAD_OPC, EXECUTE, CHECK};
+    const SLOW_CLOCK_DEFAULT_SPEED = $is_sim() ? 8 : 28 // put 8  for sim, 28 for hardware
+
     alu_test_rom_a alu_test_rom_a
     alu_test_rom_b alu_test_rom_b
     alu_test_rom_alufn alu_test_rom_alufn
     alu_test_rom_expected_result alu_test_rom_expected_result
     alu alu
     
-    sig rom_addr[4] // pointer for test case
-    sig alu_a 
-    sig alu_b
-    sig alu_opc
-    sig alu_expectedResult
-    sig computed_Result
+    sig rom_addr[2] // pointer for test case
+        
+    sig slow_clock
     
    .clk(clk) {
+         edge_detector slow_clock_edge(#RISE(1), #FALL(0))
         .rst(rst) {
-            dff counter[4] // counter to loop through test cases
+            dff current_value[32](#INIT(0))
+            dff counter[2] // counter to loop through test cases
             dff states[$width(States)](#INIT(States.IDLE))
+            
+            dff slow_clock_counter[32]
+            dff speed_pointer[$clog2(32)](#INIT(SLOW_CLOCK_DEFAULT_SPEED))
+            dff slow_clock_enable(#INIT(0))
         }
     }
 
     // FSM state logic
     always {
+        alu_test_rom_a.addr = 0;
+        alu_test_rom_b.addr = 0;
+        alu_test_rom_alufn.addr = 0;
+        alu_test_rom_expected_result.addr = 0;
+        alu.a = 0;
+        alu.b = 0;
+        alu.alufn = 0;
+        io_led = 3x{{8h00}};
+        io_segment = 0
+        io_select = 4hF
+        slow_clock_edge.in = 0
         
-        counter.d = counter.q + 1
+        counter.d = counter.q
         rom_addr = counter.q
+        current_value.d = current_value.q
         
-
+        slow_clock_counter.d = slow_clock_counter.q + 1
+        speed_pointer.d = speed_pointer.q  // Controls speed of clock/counting
+        slow_clock_enable.d = slow_clock_enable.q 
+        
+        // signal connection
+        slow_clock = slow_clock_counter.q[speed_pointer.q] // pointed based on the bit of the counter 
+        slow_clock_edge.in =  slow_clock
+        
+        // this is a mux deciding whether we stop the clock or set it with certain speed 
+        case (slow_clock_enable.q){
+            0:
+                slow_clock_edge.in = 0 // always don't increment or decrement
+            1: 
+                slow_clock_edge.in =  slow_clock 
+        }
+        
+        io_led[0] = current_value.q
         
         case (states.q){
             States.IDLE:
-                if (rom_addr<16)
-                    states.d = States.LOAD
-            
-            States.LOAD:
-                alu_test_rom_a.addr = rom_addr
-                alu_a = alu_test_rom_a.data
-                io_led[0] = alu_a
-                
-                alu_test_rom_b.addr = rom_addr
-                alu_b = alu_test_rom_b.data
-                io_led[0] = alu_b    
-                
-                alu_test_rom_alufn.addr = rom_addr
-                alu_opc = alu_test_rom_alufn.data
-            
-                alu_test_rom_expected_result.addr = rom_addr
-                alu_opc = alu_test_rom_expected_result.data
-                
-                states.d = States.EXECUTE
+                if (~slow_clock_edge.out){
+                    slow_clock_enable.d = 1
+                    if (rom_addr<4)
+                        states.d = States.LOAD_A
+                }else{
+                    counter.d = counter.q + 1
+                                        if (rom_addr<4)
+                        states.d = States.LOAD_A
+                }
+          
+
+            States.LOAD_A:
+                if (slow_clock_edge.out){
+                    alu_test_rom_a.addr = rom_addr
+                    current_value.d = alu_test_rom_a.data
+                    states.d = States.LOAD_B
+                }
+               
+            States.LOAD_B: 
+                if (slow_clock_edge.out){
+                    alu_test_rom_b.addr = rom_addr
+                    current_value.d = alu_test_rom_b.data 
+                    states.d = States.LOAD_OPC
+                }
+            States.LOAD_OPC:   
+                if (slow_clock_edge.out){              
+                    alu_test_rom_alufn.addr = rom_addr
+                    current_value.d = alu_test_rom_alufn.data
+                    states.d = States.EXECUTE
+                }
             
             States.EXECUTE:
-                alu.a = alu_a
-                alu.b = alu_b
-                alu.alufn = alu_opc
-                states.d = States.CHECK
-             
+                if (slow_clock_edge.out){
+                    alu.a = alu_test_rom_a.data
+                    alu.b = alu_test_rom_b.data
+                    alu.alufn = alu_test_rom_alufn.data
+                    current_value.d = alu.out
+                    states.d = States.CHECK
+                }
             States.CHECK:
-                computed_Result = alu.out
-                states.d = States.IDLE
-            
-                
-                
+                if (slow_clock_edge.out){
+                    alu_test_rom_expected_result.addr = rom_addr
+                    alu.a = alu_test_rom_a.data
+                    alu.b = alu_test_rom_b.data
+                    alu.alufn = alu_test_rom_alufn.data
+                    if (alu.out == alu_test_rom_expected_result.data){
+                        current_value.d = 32b11111111 // light up all if correct
+                    }
+                    states.d = States.IDLE
+                }   
         }
     }
 }
