@@ -114,6 +114,9 @@ module alu_fsm_tester#(
         case (manual_states.q){
             Manual.IDLE:
             if(io_button_edge.out[3] && slow_clock_enable.q){
+                    z.d = 0
+                    v.d = 0
+                    n.d = 0
                     if(manual_states_counter.q == 0){ 
                         manual_states.d = Manual.LOAD_A_FIRST
                         manual_states_counter.d = manual_states_counter.q +1
@@ -181,7 +184,9 @@ module alu_fsm_tester#(
                     alu.b = c{alu_b_1.q, alu_b_2.q}
                     alu.alufn = alu_opc.q
                     current_value.d = c{8x{1b0},alu.out[15:8],alu.out[7:0]}
-                    
+                    z.d = alu.z
+                    v.d = alu.v
+                    n.d = alu.n
                     manual_states.d = Manual.IDLE
                 }       
         }
@@ -191,14 +196,23 @@ module alu_fsm_tester#(
             States.IDLE:
                 if(io_button_edge.out[1] && ~slow_clock_edge.out){ 
                     slow_clock_enable.d = 1
+                    z.d = 0
+                    v.d = 0
+                    n.d = 0
                     states.d = States.LOAD_A 
                 }
                 else if(io_button_edge.out[4] && slow_clock_enable.q){
                     if (counter.q < 4){
                         counter.d = counter.q + 1
+                        z.d = 0
+                        v.d = 0
+                        n.d = 0
                         states.d = States.LOAD_A                           
                     }else{
                         counter.d = 0
+                        z.d = 0
+                        v.d = 0
+                        n.d = 0
                         states.d = States.LOAD_A
                     }
 

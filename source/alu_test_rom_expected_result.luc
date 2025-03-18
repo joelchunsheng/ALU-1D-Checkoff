@@ -6,7 +6,7 @@ module alu_test_rom_expected_result (
 
     always {
         case (addr) {
-            0: result = 32b00000011
+            0: result = 32h00000011
             1: result = 32b00000110010100
             2: result = 32h01000000
             3: result = 32b00000110
