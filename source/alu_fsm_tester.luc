@@ -216,9 +216,9 @@ module alu_fsm_tester#(
                     alu.alufn = alu_test_rom_alufn.data
                     
                     if (current_value.q == alu_test_rom_expected_result.data){
-                        current_value.d = 32b11111111 // light up all if correct
+                        current_value.d = 32x{1b1} // light up all if correct
                     }else{
-                        current_value.d = 32hFFF00000 // light up all if wrong
+                        current_value.d = c{12x{1b1} , 12x{1b0}} // light up all if wrong
                     }
                     states.d = States.IDLE
                 }   
