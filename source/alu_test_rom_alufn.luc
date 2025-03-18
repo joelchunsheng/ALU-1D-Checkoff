@@ -8,8 +8,8 @@ module alu_test_rom_alufn (
             0: alufn = 6b0  
             1: alufn = 6b0  
             2: alufn = 6b0
-            3: alufn = 6b01
-            4: alufn = 6b01
+            3: alufn = 6b000001
+            4: alufn = 6b000001
             5: alufn = 6b01
             6: alufn = 6b10
             7: alufn = 6b10

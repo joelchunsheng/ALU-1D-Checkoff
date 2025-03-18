@@ -13,24 +13,24 @@ module rca #(
         output reg cout,
         output reg [(SIZE)-1:0] s
     );
-    logic [31:0] R_67945dfb_i;
-    logic [31:0] RR_67945dfb_i;
+    logic [31:0] R_2cfd607b_i;
+    logic [31:0] RR_2cfd607b_i;
     logic [(SIZE)-1:0] M_fa_a;
     logic [(SIZE)-1:0] M_fa_b;
     logic [(SIZE)-1:0] M_fa_cin;
     logic [(SIZE)-1:0] M_fa_s;
     logic [(SIZE)-1:0] M_fa_cout;
     
-    genvar idx_0_1845653015;
+    genvar idx_0_765039200;
     
     generate
-        for (idx_0_1845653015 = 0; idx_0_1845653015 < SIZE; idx_0_1845653015 = idx_0_1845653015 + 1) begin: forLoop_idx_0_1845653015
+        for (idx_0_765039200 = 0; idx_0_765039200 < SIZE; idx_0_765039200 = idx_0_765039200 + 1) begin: forLoop_idx_0_765039200
             fa fa (
-                .a(M_fa_a[idx_0_1845653015]),
-                .b(M_fa_b[idx_0_1845653015]),
-                .cin(M_fa_cin[idx_0_1845653015]),
-                .s(M_fa_s[idx_0_1845653015]),
-                .cout(M_fa_cout[idx_0_1845653015])
+                .a(M_fa_a[idx_0_765039200]),
+                .b(M_fa_b[idx_0_765039200]),
+                .cin(M_fa_cin[idx_0_765039200]),
+                .s(M_fa_s[idx_0_765039200]),
+                .cout(M_fa_cout[idx_0_765039200])
             );
         end
     endgenerate
@@ -39,12 +39,12 @@ module rca #(
     always @* begin
         M_fa_a = a;
         M_fa_b = b;
-        for (RR_67945dfb_i = 0; RR_67945dfb_i < SIZE; RR_67945dfb_i = RR_67945dfb_i + 1) begin
-      R_67945dfb_i = (0) + RR_67945dfb_i * (1);
-            if (R_67945dfb_i == 1'h0) begin
-                M_fa_cin[R_67945dfb_i] = cin;
+        for (RR_2cfd607b_i = 0; RR_2cfd607b_i < SIZE; RR_2cfd607b_i = RR_2cfd607b_i + 1) begin
+      R_2cfd607b_i = (0) + RR_2cfd607b_i * (1);
+            if (R_2cfd607b_i == 1'h0) begin
+                M_fa_cin[R_2cfd607b_i] = cin;
             end else begin
-                M_fa_cin[R_67945dfb_i] = M_fa_cout[R_67945dfb_i - 1'h1];
+                M_fa_cin[R_2cfd607b_i] = M_fa_cout[R_2cfd607b_i - 1'h1];
             end
         end
         s = M_fa_s;

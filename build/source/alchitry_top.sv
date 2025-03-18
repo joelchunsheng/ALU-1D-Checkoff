@@ -17,12 +17,12 @@ module alchitry_top (
         input wire [2:0][7:0] io_dip
     );
     logic rst;
-    localparam _MP_STAGES_1031813467 = 3'h4;
+    localparam _MP_STAGES_1440196514 = 3'h4;
     logic M_reset_cond_in;
     logic M_reset_cond_out;
     
     reset_conditioner #(
-        .STAGES(_MP_STAGES_1031813467)
+        .STAGES(_MP_STAGES_1440196514)
     ) reset_cond (
         .clk(clk),
         .in(M_reset_cond_in),
@@ -31,32 +31,31 @@ module alchitry_top (
     
     
     localparam CLK_FREQ = 24'h989680;
-    localparam _MP_CLK_FREQ_870076774 = 24'h989680;
-    logic [2:0][7:0] M_alu_manual_io_led;
-    logic [7:0] M_alu_manual_io_segment;
-    logic [3:0] M_alu_manual_io_select;
+    logic [2:0][7:0] M_alu_fsm_io_led;
+    logic [7:0] M_alu_fsm_io_segment;
+    logic [3:0] M_alu_fsm_io_select;
+    logic [7:0] M_alu_fsm_led;
     
-    alu_manual_tester #(
-        .CLK_FREQ(_MP_CLK_FREQ_870076774)
-    ) alu_manual (
+    alu_fsm_tester alu_fsm (
         .clk(clk),
         .rst(rst),
         .io_button(io_button),
         .io_dip(io_dip),
-        .io_led(M_alu_manual_io_led),
-        .io_segment(M_alu_manual_io_segment),
-        .io_select(M_alu_manual_io_select)
+        .io_led(M_alu_fsm_io_led),
+        .io_segment(M_alu_fsm_io_segment),
+        .io_select(M_alu_fsm_io_select),
+        .led(M_alu_fsm_led)
     );
     
     
     always @* begin
         M_reset_cond_in = ~rst_n;
         rst = M_reset_cond_out;
-        led = 8'h0;
+        led = M_alu_fsm_led;
         usb_tx = usb_rx;
-        io_segment = M_alu_manual_io_segment;
-        io_select = M_alu_manual_io_select;
-        io_led = M_alu_manual_io_led;
+        io_segment = M_alu_fsm_io_segment;
+        io_select = M_alu_fsm_io_select;
+        io_led = M_alu_fsm_io_led;
     end
     
     

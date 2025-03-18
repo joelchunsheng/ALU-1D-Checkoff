@@ -1,6 +1,4 @@
-module alu_fsm_tester#(
-    CLK_FREQ ~ 1000 : CLK_FREQ > 0)  
-(
+module alu_fsm_tester(
     input clk,             // clock
     input rst,             // reset
     input io_button[5],

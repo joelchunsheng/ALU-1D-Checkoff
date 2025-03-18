@@ -12,37 +12,37 @@ module boolean #(
         input wire [5:0] alufn_signal,
         output reg [(SIZE)-1:0] bool
     );
-    logic [31:0] R_1947ca49_i;
-    logic [31:0] RR_1947ca49_i;
+    logic [31:0] R_69e6c0f1_i;
+    logic [31:0] RR_69e6c0f1_i;
     logic [31:0] M_mux_4_32_s0;
     logic [31:0] M_mux_4_32_s1;
     logic [31:0][3:0] M_mux_4_32_in;
     logic [31:0] M_mux_4_32_out;
     
-    genvar idx_0_427911789;
+    genvar idx_0_1054057108;
     
     generate
-        for (idx_0_427911789 = 0; idx_0_427911789 < 32; idx_0_427911789 = idx_0_427911789 + 1) begin: forLoop_idx_0_427911789
+        for (idx_0_1054057108 = 0; idx_0_1054057108 < 32; idx_0_1054057108 = idx_0_1054057108 + 1) begin: forLoop_idx_0_1054057108
             mux_4 mux_4_32 (
-                .s0(M_mux_4_32_s0[idx_0_427911789]),
-                .s1(M_mux_4_32_s1[idx_0_427911789]),
-                .in(M_mux_4_32_in[idx_0_427911789]),
-                .out(M_mux_4_32_out[idx_0_427911789])
+                .s0(M_mux_4_32_s0[idx_0_1054057108]),
+                .s1(M_mux_4_32_s1[idx_0_1054057108]),
+                .in(M_mux_4_32_in[idx_0_1054057108]),
+                .out(M_mux_4_32_out[idx_0_1054057108])
             );
         end
     endgenerate
     
     
     always @* begin
-        for (RR_1947ca49_i = 0; RR_1947ca49_i < 6'h20; RR_1947ca49_i = RR_1947ca49_i + 1) begin
-      R_1947ca49_i = (0) + RR_1947ca49_i * (1);
-            M_mux_4_32_s0[R_1947ca49_i] = alufn_signal[1'h0];
-            M_mux_4_32_s1[R_1947ca49_i] = alufn_signal[1'h1];
-            M_mux_4_32_in[R_1947ca49_i][1'h0] = a[R_1947ca49_i] & b[R_1947ca49_i];
-            M_mux_4_32_in[R_1947ca49_i][1'h1] = a[R_1947ca49_i] | b[R_1947ca49_i];
-            M_mux_4_32_in[R_1947ca49_i][2'h2] = a[R_1947ca49_i] ^ b[R_1947ca49_i];
-            M_mux_4_32_in[R_1947ca49_i][2'h3] = a[R_1947ca49_i];
-            bool[R_1947ca49_i] = M_mux_4_32_out[R_1947ca49_i];
+        for (RR_69e6c0f1_i = 0; RR_69e6c0f1_i < 6'h20; RR_69e6c0f1_i = RR_69e6c0f1_i + 1) begin
+      R_69e6c0f1_i = (0) + RR_69e6c0f1_i * (1);
+            M_mux_4_32_s0[R_69e6c0f1_i] = a[R_69e6c0f1_i];
+            M_mux_4_32_s1[R_69e6c0f1_i] = b[R_69e6c0f1_i];
+            M_mux_4_32_in[R_69e6c0f1_i][1'h0] = alufn_signal[1'h0];
+            M_mux_4_32_in[R_69e6c0f1_i][1'h1] = alufn_signal[1'h1];
+            M_mux_4_32_in[R_69e6c0f1_i][2'h2] = alufn_signal[2'h2];
+            M_mux_4_32_in[R_69e6c0f1_i][2'h3] = alufn_signal[2'h3];
+            bool[R_69e6c0f1_i] = M_mux_4_32_out[R_69e6c0f1_i];
         end
     end
     
