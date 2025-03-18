@@ -5,10 +5,10 @@ module alu_test_rom_a (
     sig a[32]
     always {
         case (addr) {
-            0: a = 32b00000001  // a = 32b00000001, b = 32b00000010, alufn = (add), ans = 32b00000011
-            1: a = 32b11111111  // a = 32b11111111, b = 32b10010101, alufn = (add), ans = 32b00000110010100
-            2: a = 32h00FFFFFF  // a = 32h00FFFFFF, b = 32b00000001, alufn = (add), ans = 32h01000000 (overflow)
-            3: a = 32b00000011  // a = 32b00000011, b = 32b00000011, alufn = (add), ans = 32b00000110
+            0: a = 32h00000001  // a = 32b00000001, b = 32b00000010, alufn = (add), ans = 32b00000011
+            1: a = 32h11111111  // a = 32b11111111, b = 32b10010101, alufn = (add), ans = 32b00000110010100
+            2: a = 32h00FFFFFF  // a = 32h00FFFFFF, b = 32b00000001, alufn = (add), ans = 32h01000000
+            3: a = 32h00000011
             default: a = 32d0
         }
         data = a
