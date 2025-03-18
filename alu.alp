@@ -94,6 +94,18 @@
                     "type": "DiskFile",
                     "path": "source/x_bit_left_shifter.luc"
                 }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/divider.luc"
+                }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/modulo.luc"
+                }
             }
         ],
         "constraintFiles": [

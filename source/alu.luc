@@ -7,14 +7,17 @@ module alu (
     output v, // Overflow
     output n // Negative
 ) {
-    mux_2 mux_2[32]
+    //mux_2 mux_2[32]
     mux_4 mux_4[32]
+    mux_4 mux_4_1[32]
     
     adder adder(#SIZE(32))
     compare compare()
     boolean boolean(#SIZE(32));
     shifter shifter() 
     multiplier multiplier()
+    divider divider()
+    modulo modulo()
     
     sig cmp_extended[32];
     
@@ -49,14 +52,28 @@ module alu (
         compare.alufn = alufn
         
         cmp_extended = c{31x{b0}, compare.cmp};
+        
+        divider.a = a
+        divider.b = b
+        
+        modulo.a = a
+        modulo.b = b
                 
         repeat (i, 32) {
             
-            mux_2.in[i][0] = adder.out[i]
-            mux_2.in[i][1] = multiplier.mul[i]
-            mux_2.s0[i] = alufn[1]
+            mux_4_1.s0[i] = alufn[1]
+            mux_4_1.s1[i] = alufn[2]
+            
+            mux_4_1.in[i][0] = adder.out[i]
+            mux_4_1.in[i][1] = multiplier.mul[i]
+            mux_4_1.in[i][2] = divider.out[i]
+            mux_4_1.in[i][3] = modulo.out[i]
+
+            //mux_2.in[i][0] = adder.out[i]
+            //mux_2.in[i][1] = multiplier.mul[i]
+            //mux_2.s0[i] = alufn[1]
                 
-            mux_4.in[i][0] = mux_2.out[i]
+            mux_4.in[i][0] = mux_4_1.out[i]
             mux_4.in[i][1] = boolean.bool[i]
             mux_4.in[i][2] = shifter.shift[i]
             mux_4.in[i][3] = cmp_extended[i]
