@@ -1,5 +1,5 @@
 module alu_test_rom_alufn (
-    input addr[4],    // Address width depends on the number of test cases (16 entries)
+    input addr[5],    // Address width depends on the number of test cases (16 entries)
     output data[6]    // Output ALUFN[6]
 ) {
     sig alufn[6]
