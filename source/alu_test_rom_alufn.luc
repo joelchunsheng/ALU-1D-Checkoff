@@ -7,7 +7,7 @@ module alu_test_rom_alufn (
         case (addr) {
             0: alufn = 6b000000
             1: alufn = 6b000000
-            2: alufn = 6b000111
+            2: alufn = 6b000001
             3: alufn = 6b000111
             default: alufn = 6b0
         }
