@@ -114,6 +114,8 @@ module alu_fsm_tester#(
             States.EXECUTE:
                 if (slow_clock_edge.out){
                     alu_test_rom_a.addr = rom_addr
+                    alu_test_rom_b.addr = rom_addr
+                    alu_test_rom_alufn.addr = rom_addr
                     alu.a = alu_test_rom_a.data
                     alu.b = alu_test_rom_b.data
                     alu.alufn = alu_test_rom_alufn.data
@@ -123,6 +125,7 @@ module alu_fsm_tester#(
             States.CHECK:
                 if (slow_clock_edge.out){
                     alu_test_rom_expected_result.addr = rom_addr
+                    alu_test_rom_a.addr = rom_addr
                     alu_test_rom_b.addr = rom_addr
                     alu_test_rom_alufn.addr = rom_addr
                     
