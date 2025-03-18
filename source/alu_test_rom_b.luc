@@ -5,7 +5,7 @@ module alu_test_rom_b (
     sig b[32]
     always {
         case (addr) {
-            0: b = 32h00000010  
+            0: b = 32h00000000  
             1: b = 32h10010101
             2: b = 32h00000001
             3: b = 32h00000011
