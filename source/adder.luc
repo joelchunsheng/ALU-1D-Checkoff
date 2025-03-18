@@ -21,7 +21,7 @@ module adder #(
         n = 0
         
         rca.a = a
-        xb = b^32x{alufn_signal[0]}
+        xb[SIZE-1:0] = b^32x{alufn_signal[0]}
         rca.b = xb
         rca.cin = alufn_signal[0]
         

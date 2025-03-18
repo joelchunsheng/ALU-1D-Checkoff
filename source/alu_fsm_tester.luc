@@ -6,7 +6,10 @@ module alu_fsm_tester#(
     input io_button[5],
     output io_led[3][8],
     output io_segment[8],
-    output io_select[4]
+    output io_select[4],
+    output led[8],
+    input usb_rx,           // USB->Serial input
+    output usb_tx
 ) {
     // FSM states
     enum States {IDLE, LOAD_A, LOAD_B, LOAD_OPC, EXECUTE, CHECK, MANUAL};
@@ -32,6 +35,8 @@ module alu_fsm_tester#(
             dff counter[2] // counter to loop through test cases
             dff states[$width(States)](#INIT(States.IDLE))
             
+            dff overflow_flag[1](#INIT(0));
+            
             dff slow_clock_counter[32]
             dff speed_pointer[$clog2(32)](#INIT(SLOW_CLOCK_DEFAULT_SPEED))
             dff slow_clock_enable(#INIT(0))
@@ -51,6 +56,8 @@ module alu_fsm_tester#(
         io_segment = 0
         io_select = 4hF
         slow_clock_edge.in = 0
+        led = 8h00
+        usb_tx = usb_rx
         
         io_button_cond.in = io_button[4:0]
         io_button_edge.in = io_button_cond.out
@@ -58,6 +65,7 @@ module alu_fsm_tester#(
         counter.d = counter.q
         rom_addr = counter.q
         current_value.d = current_value.q
+        overflow_flag.d = overflow_flag.q
         
         slow_clock_counter.d = slow_clock_counter.q + 1
         speed_pointer.d = speed_pointer.q  // Controls speed of clock/counting
@@ -76,9 +84,12 @@ module alu_fsm_tester#(
         }
         
         io_led[0] = current_value.q
+        led[0] = overflow_flag.q; 
+        
         
         case (states.q){
             States.IDLE:
+                
                 if(io_button_edge.out[1] && ~slow_clock_edge.out){ 
                     slow_clock_enable.d = 1
                     states.d = States.LOAD_A 
@@ -120,6 +131,8 @@ module alu_fsm_tester#(
                     alu.b = alu_test_rom_b.data
                     alu.alufn = alu_test_rom_alufn.data
                     current_value.d = alu.out
+                    overflow_flag.d = 1
+                    
                     states.d = States.CHECK
                 }
             States.CHECK:
@@ -132,9 +145,11 @@ module alu_fsm_tester#(
                     alu.a = alu_test_rom_a.data
                     alu.b = alu_test_rom_b.data
                     alu.alufn = alu_test_rom_alufn.data
+                    overflow_flag.d = alu.v
                     if (alu.out == alu_test_rom_expected_result.data){
                         current_value.d = 32b11111111 // light up all if correct
                     }
+                    //overflow_flag.d = alu.v;
                     states.d = States.IDLE
                 }   
         }

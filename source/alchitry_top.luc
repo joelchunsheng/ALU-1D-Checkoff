@@ -13,6 +13,7 @@ module alchitry_top (
     
     sig rst                 // reset signal
     
+    
     .clk(clk) {
         // The reset conditioner is used to synchronize the reset signal to the FPGA
         // clock. This ensures the entire FPGA comes out of reset at the same time.
@@ -26,9 +27,13 @@ module alchitry_top (
         reset_cond.in = ~rst_n  // input raw inverted reset signal
         rst = reset_cond.out    // conditioned reset
         
-        led = 8h00             // turn LEDs off
+        led = alu_fsm.led
+        alu_fsm.usb_rx = usb_rx
+        usb_tx = alu_fsm.usb_tx
+        // turn LEDs off
         
-        usb_tx = usb_rx          // loop serial port
+        //usb_tx = usb_rx          
+        // loop serial port
         
 
         // to test ALU 
