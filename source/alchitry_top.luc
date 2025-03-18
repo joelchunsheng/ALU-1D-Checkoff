@@ -32,7 +32,6 @@ module alchitry_top (
         
 
         // to test ALU 
-        
         io_segment = alu_fsm.io_segment
         io_select = alu_fsm.io_select       
         io_led = alu_fsm.io_led
