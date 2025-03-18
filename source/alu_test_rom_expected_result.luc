@@ -6,10 +6,37 @@ module alu_test_rom_expected_result (
 
     always {
         case (addr) {
-            0: result = 32b00000011
-            1: result = 32b00000110010100
-            2: result = 32h01000000
-            3: result = 32b00000110
+            0: result = 32d35 
+            1: result = -32d2
+            2: result = 32d32
+            3: result = 32d5
+            4: result = -31d5
+            5: result = -31d2147483647
+            6: result = 32d300
+            7: result = 32d0
+            8: result = 32d276447232
+            9: result = 32d0
+            10: result = 32d0
+            11: result = 32d1
+            12: result = 32hFFFFFFFF
+            13: result = 32d15
+            14: result = 32d91
+            15: result = 32d2147482078
+            16: result = 32d0
+            17: result = 32d0
+            18: result = 32d5
+            19: result = 32d10
+            20: result = 32d91
+            21: result = 32h80000000
+            22: result = 32d2
+            23: result = 32d91
+            24: result = 32d1
+            25: result = 32hFFFFFFFF
+            26: result = 32d0
+            27: result = 32d1
+            28: result = 32d0
+            29: result = 32d1
+            30: result = 32d0
             default: result = 32b0
         }
         data = result;  
