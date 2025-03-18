@@ -1,14 +1,41 @@
 module alu_test_rom_alufn (
-    input addr[4],    // Address width depends on the number of test cases (16 entries)
+    input addr[5],    // Address width depends on the number of test cases (16 entries)
     output data[6]    // Output ALUFN[6]
 ) {
     sig alufn[6]
     always {
         case (addr) {
-            0: alufn = 6b000000
-            1: alufn = 6b000000
-            2: alufn = 6b000000
-            3: alufn = 6b000000
+            0: alufn = 6b0  
+            1: alufn = 6b0  
+            2: alufn = 6b0
+            3: alufn = 6b01
+            4: alufn = 6b01
+            5: alufn = 6b01
+            6: alufn = 6b10
+            7: alufn = 6b10
+            8: alufn = 6b10
+            9: alufn = 6h18
+            10: alufn = 6h18
+            11: alufn = 6h18
+            12: alufn = 6h1E
+            13: alufn = 6h1E
+            14: alufn = 6h1E
+            15: alufn = 6h16
+            16: alufn = 6h16
+            17: alufn = 6h16
+            18: alufn = 6h1A
+            19: alufn = 6h20
+            20: alufn = 6h20
+            21: alufn = 6h20
+            22: alufn = 6h21
+            23: alufn = 6h21
+            24: alufn = 6h21
+            25: alufn = 6h23
+            26: alufn = 6h33
+            27: alufn = 6h33
+            28: alufn = 6h33
+            29: alufn = 6h35
+            30: alufn = 6h35
             default: alufn = 6b0
         }
         data = alufn;  

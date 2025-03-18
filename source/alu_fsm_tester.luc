@@ -22,7 +22,7 @@ module alu_fsm_tester#(
     alu_test_rom_expected_result alu_test_rom_expected_result
     alu alu
 
-    sig rom_addr[2] // pointer for test case
+    sig rom_addr[5] // pointer for test case
         
     sig slow_clock
     sig flipped
@@ -33,7 +33,7 @@ module alu_fsm_tester#(
          edge_detector slow_clock_edge(#RISE(1), #FALL(0))
         .rst(rst) {
             dff current_value[32](#INIT(0))
-            dff counter[2] // counter to loop through test cases
+            dff counter[5] // counter to loop through test cases
             dff states[$width(States)](#INIT(States.IDLE))
             dff manual_states[$width(Manual)](#INIT(States.IDLE))
             dff manual_states_counter[3]
@@ -194,7 +194,7 @@ module alu_fsm_tester#(
         // States for auto tester
         case (states.q){
             States.IDLE:
-                if(io_button_edge.out[1] && ~slow_clock_edge.out){ 
+                if(io_button_edge.out[1] && ~slow_clock_edge.out && ~slow_clock_enable.q){ 
                     slow_clock_enable.d = 1
                     z.d = 0
                     v.d = 0
@@ -202,7 +202,7 @@ module alu_fsm_tester#(
                     states.d = States.LOAD_A 
                 }
                 else if(io_button_edge.out[4] && slow_clock_enable.q){
-                    if (counter.q < 4){
+                    if (counter.q < 32){
                         counter.d = counter.q + 1
                         z.d = 0
                         v.d = 0

@@ -1,14 +1,41 @@
 module alu_test_rom_b (
-    input addr[4],    // Address width depends on the number of test cases (16 entries)
+    input addr[5],    // Address width depends on the number of test cases (16 entries)
     output data[32]   // Output B[32]
 ) {
     sig b[32]
     always {
         case (addr) {
-            0: b = 32h00000010  
-            1: b = 32h80000000
-            2: b = 32h00000001
-            3: b = 32h00000011
+            0: b = 32d20  
+            1: b = 32d2147483647  
+            2: b = 32d32
+            3: b = 32d15
+            4: b = 32d20
+            5: b = 32d2147483647
+            6: b = 32d15
+            7: b = 32d5
+            8: b = 32d1000000000
+            9: b = 32d32
+            10: b = -32d50
+            11: b = 32d1
+            12: b = 32d1569
+            13: b = 32d10
+            14: b = 32d91
+            15: b = 32d1569
+            16: b = 32d10
+            17: b = 32d91
+            18: b = 32d0
+            19: b = 32d1
+            20: b = 32d0
+            21: b = 32d31
+            22: b = 32d1
+            23: b = 32d0
+            24: b = 32d31
+            25: b = 32d1
+            26: b = 32d20
+            27: b = 32d20
+            28: b = 32d20
+            29: b = 32d20
+            30: b = 32d20
             default: b = 32d0
         }
         data = b;  
