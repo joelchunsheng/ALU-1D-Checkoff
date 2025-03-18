@@ -91,7 +91,8 @@ module alu_fsm_tester#(
                 slow_clock_edge.in =  slow_clock 
         }
         
-        io_led[0] = current_value.q
+        //io_led[0] = current_value.q
+        io_led = {current_value.q[23:16],current_value.q[15:8],current_value.q[7:0]}
         
         // States for manual tester
         case (manual_states.q){
@@ -198,8 +199,7 @@ module alu_fsm_tester#(
                     if (io_dip[2][7] == 1){
                         flipped = ~current_value.q[0]
                         current_value.d[0] = flipped;
-                    }
-                                        
+                    }                                        
                     states.d = States.CHECK
                 }
             States.CHECK:
@@ -218,7 +218,7 @@ module alu_fsm_tester#(
                     if (current_value.q == alu_test_rom_expected_result.data){
                         current_value.d = 32b11111111 // light up all if correct
                     }else{
-                        current_value.d = 32b11110000 // light up all if correct
+                        current_value.d = 32hFFF00000 // light up all if wrong
                     }
                     states.d = States.IDLE
                 }   
