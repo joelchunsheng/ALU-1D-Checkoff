@@ -26,7 +26,7 @@ module alchitry_top (
         reset_cond.in = ~rst_n  // input raw inverted reset signal
         rst = reset_cond.out    // conditioned reset
         
-        led = 8h00             // turn LEDs off
+        led = alu_fsm.led             // turn LEDs off
         
         usb_tx = usb_rx          // loop serial port
         

@@ -7,7 +7,8 @@ module alu_fsm_tester#(
     input io_dip[3][8],
     output io_led[3][8],
     output io_segment[8],
-    output io_select[4]
+    output io_select[4],
+    output led[8]
 ) {
     // FSM states
     enum States {IDLE, LOAD_A, LOAD_B, LOAD_OPC, EXECUTE, CHECK};
@@ -41,6 +42,10 @@ module alu_fsm_tester#(
             dff alu_b[32]
             dff alu_opc[6]
             dff result_checker[32]
+            dff z[1]
+            dff v[1]
+            dff n[1]
+            
             
             dff slow_clock_counter[32]
             dff speed_pointer[$clog2(32)](#INIT(SLOW_CLOCK_DEFAULT_SPEED))
@@ -66,6 +71,7 @@ module alu_fsm_tester#(
         io_segment = 0
         io_select = 4hF
         slow_clock_edge.in = 0
+        led = 8h00
         
         io_button_cond.in = io_button[4:0]
         io_button_edge.in = io_button_cond.out
@@ -74,6 +80,7 @@ module alu_fsm_tester#(
         rom_addr = counter.q
         current_value.d = current_value.q
         manual_states.d = manual_states.q
+        v.d = v.q
         
         slow_clock_counter.d = slow_clock_counter.q + 1
         speed_pointer.d = speed_pointer.q  // Controls speed of clock/counting
@@ -93,6 +100,9 @@ module alu_fsm_tester#(
         
         //io_led[0] = current_value.q
         io_led = {current_value.q[23:16],current_value.q[15:8],current_value.q[7:0]}
+        led[0] = z.q
+        led[1] = v.q
+        led[2] = n.q
         
         // States for manual tester
         case (manual_states.q){
@@ -194,7 +204,9 @@ module alu_fsm_tester#(
                     alu.b = alu_test_rom_b.data
                     alu.alufn = alu_test_rom_alufn.data
                     current_value.d = alu.out
-                    
+                    z.d = alu.z
+                    v.d = alu.v
+                    n.d = alu.n
                     // If last switch is flipped
                     if (io_dip[2][7] == 1){
                         flipped = ~current_value.q[0]
@@ -214,6 +226,9 @@ module alu_fsm_tester#(
                     alu.a = alu_test_rom_a.data
                     alu.b = alu_test_rom_b.data
                     alu.alufn = alu_test_rom_alufn.data
+                    z.d = alu.z
+                    v.d = alu.v
+                    n.d = alu.n
                     
                     if (current_value.q == alu_test_rom_expected_result.data){
                         current_value.d = 32b11111111 // light up all if correct
