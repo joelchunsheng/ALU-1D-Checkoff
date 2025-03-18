@@ -17,6 +17,7 @@ module alu (
     shifter shifter() 
     multiplier multiplier()
     divider divider()
+    modulo modulo()
     
     sig cmp_extended[32];
     
@@ -54,6 +55,9 @@ module alu (
         
         divider.a = a
         divider.b = b
+        
+        modulo.a = a
+        modulo.b = b
                 
         repeat (i, 32) {
             
@@ -63,7 +67,7 @@ module alu (
             mux_4_1.in[i][0] = adder.out[i]
             mux_4_1.in[i][1] = multiplier.mul[i]
             mux_4_1.in[i][2] = divider.out[i]
-            mux_4_1.in[i][3] = a[i]
+            mux_4_1.in[i][3] = modulo.out[i]
 
             //mux_2.in[i][0] = adder.out[i]
             //mux_2.in[i][1] = multiplier.mul[i]

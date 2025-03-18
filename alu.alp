@@ -148,6 +148,12 @@
                     "type": "DiskFile",
                     "path": "source/divider.luc"
                 }
+            },
+            {
+                "file": {
+                    "type": "DiskFile",
+                    "path": "source/modulo.luc"
+                }
             }
         ],
         "constraintFiles": [
